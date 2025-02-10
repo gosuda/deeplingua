@@ -10,7 +10,11 @@ def main():
     args = parser.parse_args()
 
     from datasets import load_dataset
+    import os
     import json
+
+    # Set HF_HUB_ENABLE_HF_TRANSFER to 1 to enable faster downloads
+    os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
 
     # Load the dataset
     dataset = load_dataset(args.dataset_name, split=args.split)

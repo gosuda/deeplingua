@@ -10,8 +10,6 @@ import (
 )
 
 type Reader struct {
-	pool fastjson.ParserPool
-
 	file     *os.File
 	fileView []byte
 	offset   int64
@@ -39,13 +37,6 @@ func NewReader(f *os.File) (*Reader, error) {
 	return g, nil
 }
 
-func (g *Reader) newValue() *Value {
-	v := valuePool.Get().(*Value)
-	v.r = g
-	v.p = g.pool.Get()
-	return v
-}
-
 func (g *Reader) Scan() (*Value, error) {
 	if g.offset >= g.size || g.offset < 0 {
 		return nil, io.EOF
@@ -55,8 +46,8 @@ func (g *Reader) Scan() (*Value, error) {
 	idx := bytes.IndexByte(g.fileView[g.offset:], '\n')
 	if idx == -1 {
 		// try parse the last line
-		v := g.newValue()
-		fv, err := v.p.ParseBytes(g.fileView[g.offset:])
+		v := &Value{}
+		fv, err := fastjson.ParseBytes(g.fileView[g.offset:])
 		if err != nil {
 			if g.size-g.offset < 2 {
 				return nil, io.EOF
@@ -71,8 +62,8 @@ func (g *Reader) Scan() (*Value, error) {
 		return v, nil
 	}
 
-	v := g.newValue()
-	fv, err := v.p.ParseBytes(g.fileView[g.offset : g.offset+int64(idx)])
+	v := &Value{}
+	fv, err := fastjson.ParseBytes(g.fileView[g.offset : g.offset+int64(idx)])
 	if err != nil {
 		return nil, err
 	}

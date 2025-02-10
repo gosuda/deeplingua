@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	bufferFlushSize = 4 * 1024 * 1024 // 4MB
+	bufferFlushSize = 0 // 0KB
 )
 
 type Writer struct {

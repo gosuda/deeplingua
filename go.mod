@@ -6,6 +6,7 @@ require (
 	cloud.google.com/go/vertexai v0.13.3
 	github.com/lemon-mint/coord v0.0.0-20241212003935-0de386a7f9d3
 	github.com/rs/zerolog v1.33.0
+	github.com/valyala/fastjson v1.6.4
 )
 
 require (

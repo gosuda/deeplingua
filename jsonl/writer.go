@@ -47,3 +47,13 @@ func (g *Writer) Flush() error {
 	g.buffer = g.buffer[:0]
 	return err
 }
+
+func (g *Writer) Close() error {
+	err := g.Flush()
+	if err != nil {
+		return err
+	}
+	g.file = nil
+	g.buffer = nil
+	return nil
+}

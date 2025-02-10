@@ -65,6 +65,9 @@ func (g *Reader) Scan() (*Value, error) {
 		}
 		v.Value = fv
 		g.offset = g.size
+
+		g.Close() // close the reader
+
 		return v, nil
 	}
 
@@ -77,4 +80,19 @@ func (g *Reader) Scan() (*Value, error) {
 	g.offset += int64(idx) + 1
 
 	return v, nil
+}
+
+func (g *Reader) Close() error {
+	if g.fileView == nil {
+		return nil
+	}
+
+	err := mmap.UnMap(g.fileView)
+	if err != nil {
+		return err
+	}
+	g.fileView = nil
+	g.offset = -1
+
+	return nil
 }

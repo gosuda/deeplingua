@@ -9,6 +9,7 @@ var punctuationReplacer = strings.NewReplacer(
 	string("\u2013"), "-",
 	string("\u2014"), "-",
 	string("\u2015"), "-",
+	string("\u2212"), "-",
 	string("\u2018"), "'",
 	string("\u2019"), "'",
 	string("\u201A"), "'",

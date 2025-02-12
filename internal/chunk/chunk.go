@@ -8,15 +8,12 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+var tok, _ = tokenizer.New("gemini-1.5-flash")
+
 // ChunkMarkdown splits the input text into smaller chunks, ensuring that each chunk does not exceed the token limit.
 // It handles code blocks and tries to split paragraphs at natural breakpoints (e.g., periods) to preserve the original formatting.
 // The resulting chunks are returned as a slice of strings.
 func ChunkMarkdown(input string) []string {
-	tok, err := tokenizer.New("gemini-1.5-flash")
-	if err != nil {
-		log.Fatal().Err(err).Msg("failed to create tokenizer")
-	}
-
 	var chunks []string
 	var currentChunk strings.Builder
 	currentTokens := 0
@@ -54,14 +51,15 @@ func ChunkMarkdown(input string) []string {
 						// Split by rune count or "."
 						runes := []rune(line)
 						for len(runes) > 0 {
-							splitIndex := 4096
-							if splitIndex > len(runes) {
-								splitIndex = len(runes)
-							}
-							// Try to split at the last period before 4096 runes
-							lastPeriod := strings.LastIndex(string(runes[:splitIndex]), ".")
-							if lastPeriod > 0 {
-								splitIndex = lastPeriod + 1
+							splitIndex := min(4096, len(runes))
+							for idx := range runes {
+								if runes[idx] == '.' ||
+									runes[idx] == '?' ||
+									runes[idx] == '!' ||
+									runes[idx] == ';' {
+									splitIndex = idx + 1
+									break
+								}
 							}
 							chunks = append(chunks, string(runes[:splitIndex]))
 							runes = runes[splitIndex:]
@@ -108,10 +106,6 @@ func groupChunks(chunks []string, maxTokens int) [][]string {
 	var currentGroup []string
 
 	currentTokens := 0
-	tok, err := tokenizer.New("gemini-1.5-flash")
-	if err != nil {
-		log.Fatal().Err(err).Msg("failed to create tokenizer")
-	}
 
 	for _, chunk := range chunks {
 		chunkTokens, err := tok.CountTokens(genai.Text(chunk))

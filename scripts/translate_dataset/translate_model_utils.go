@@ -41,7 +41,7 @@ type RateLimitingModel struct {
 func NewRateLimitingModel(model llm.Model, tps rate.Limit) *RateLimitingModel {
 	return &RateLimitingModel{
 		Model: model,
-		rlim:  rate.NewLimiter(tps, 0),
+		rlim:  rate.NewLimiter(tps, 1),
 	}
 }
 

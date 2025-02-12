@@ -26,10 +26,11 @@ var (
 	doEvaluation       bool                                  = false // optional
 	customPipelinePre  func(index int, v *jsonl.Value) error         // optional
 	customPipelinePost func(index int, v *jsonl.Value) error         // optional
+	startIndex         int                                   = 0     // optional
 )
 
 func main() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339Nano})
 	var inFile string
 	var outFile string
 	var inLang string
@@ -213,6 +214,11 @@ func main() {
 				break
 			}
 			if v == nil {
+				continue
+			}
+
+			if index < startIndex {
+				index++
 				continue
 			}
 

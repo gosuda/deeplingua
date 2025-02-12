@@ -8,6 +8,7 @@ import (
 	"os"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"github.com/lemon-mint/coord/llm"
 	"github.com/rs/zerolog"
@@ -127,8 +128,12 @@ func main() {
 						if string(messages[i].GetStringBytes("translated_content")) != "" {
 							continue
 						}
-						//original = normalize.Normalize(original)
 						translated := ""
+
+						if !utf8.ValidString(original) {
+							original = "<<Invalid UTF-8 sequence>>"
+							continue
+						}
 
 						translated, err := translate.TranslateCustomPrompt(context.Background(), translationModel, original, outLang, customPrompt)
 						if err != nil {
@@ -136,7 +141,6 @@ func main() {
 							time.Sleep(time.Duration(float64(10) * rand.Float64() * float64(time.Second)))
 							continue RL
 						}
-						//translated = normalize.Normalize(translated)
 
 						data, err := json.Marshal(translated)
 						if err != nil {

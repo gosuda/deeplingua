@@ -3,27 +3,27 @@ package normalize
 import "strings"
 
 var spaceReplacer = strings.NewReplacer(
-	string("\xA0"), " ",
-	string("\x16\x80"), "_",
-	string("\x20\x00"), " ",
-	string("\x20\x01"), " ",
-	string("\x20\x02"), " ",
-	string("\x20\x03"), " ",
-	string("\x20\x04"), " ",
-	string("\x20\x05"), " ",
-	string("\x20\x06"), " ",
-	string("\x20\x07"), " ",
-	string("\x20\x08"), " ",
-	string("\x20\x09"), " ",
-	string("\x20\x0A"), " ",
-	string("\x20\x2F"), " ",
+	string("\u00A0"), " ",
+	string("\u1680"), "_",
+	string("\u2000"), " ",
+	string("\u2001"), " ",
+	string("\u2002"), " ",
+	string("\u2003"), " ",
+	string("\u2004"), " ",
+	string("\u2005"), " ",
+	string("\u2006"), " ",
+	string("\u2007"), " ",
+	string("\u2008"), " ",
+	string("\u2009"), " ",
+	string("\u200A"), " ",
+	string("\u202F"), " ",
 
-	string("\x20\x61"), "",
-	string("\x20\x62"), "",
-	string("\x20\x63"), "",
-	string("\x20\x64"), "",
+	string("\u2061"), "",
+	string("\u2062"), "",
+	string("\u2063"), "",
+	string("\u2064"), "",
 
-	string("\x30\x00"), " ",
+	string("\u3000"), " ",
 )
 
 func normalizeSpace(s string) string {

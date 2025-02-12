@@ -30,7 +30,8 @@ func (g *LoadBalancingModel) Close() error {
 }
 
 func (g *LoadBalancingModel) Name() string {
-	return "LoadBalancingModel"
+	idx := g.idx.Load() % int64(len(g.models))
+	return g.models[idx].Name()
 }
 
 type RateLimitingModel struct {
@@ -47,7 +48,7 @@ func NewRateLimitingModel(model llm.Model, tps rate.Limit) *RateLimitingModel {
 
 func (g *RateLimitingModel) GenerateStream(ctx context.Context, chat *llm.ChatContext, input *llm.Content) *llm.StreamContent {
 	g.rlim.Wait(ctx)
-	log.Info().Msg("calling llm model")
+	log.Debug().Str("model", g.Name()).Msg("sending request")
 	return g.Model.GenerateStream(ctx, chat, input)
 }
 

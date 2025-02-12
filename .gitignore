@@ -28,6 +28,8 @@ go.work.sum
 
 *.jsonl
 *.fail
+*.failed
 scripts/translate_dataset/models.go
 
 .DS_Store
+config.json

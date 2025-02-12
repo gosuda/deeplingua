@@ -205,7 +205,7 @@ L:
 			Index: index,
 			Value: v,
 		}:
-			lastReadIndex.Store(int64(index))
+			lastReadIndex.Store(int64(index + 1))
 			log.Info().Int("Index", index).Msg("read successfully, queued")
 		case <-stopSignal:
 			log.Info().Msg("stop signal received, stopping reader")
@@ -321,6 +321,7 @@ func writerWorker(completionQueue <-chan *jsonl.Value, errorQueue <-chan *jsonl.
 			if !ok {
 				errorQueue = nil // Set to nil to stop selecting this case when channel is closed
 			} else {
+				failedTranslations.Add(1)
 				if err := wfail.Write(v); err != nil {
 					panic(err) // Writer error is critical
 				}
@@ -329,6 +330,7 @@ func writerWorker(completionQueue <-chan *jsonl.Value, errorQueue <-chan *jsonl.
 			if !ok {
 				completionQueue = nil // Set to nil to stop selecting this case when channel is closed
 			} else {
+				successfulTranslations.Add(1)
 				if err := w.Write(v); err != nil {
 					panic(err) // Writer error is critical
 				}

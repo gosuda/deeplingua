@@ -80,6 +80,8 @@ func NormalizeShareGPT(v *jsonl.Value) {
 			role_val = role_values[1]
 		case "gpt", "assistant", "model", "completion", "bot", "ai", "gpt-4", "gpt-3.5-turbo":
 			role_val = role_values[2]
+		default:
+			continue
 		}
 
 		message.Set("role", role_val)

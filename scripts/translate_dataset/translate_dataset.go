@@ -67,7 +67,7 @@ func main() {
 	flag.StringVar(&outFile, "out", "", "Output file")
 	flag.StringVar(&inLang, "src", "", "Source language")
 	flag.StringVar(&outLang, "dst", "", "Target language")
-	flag.IntVar(&workers, "workers", 64, "Workers")
+	flag.IntVar(&workers, "workers", 256, "Workers")
 	flag.Parse()
 	if inFile == "" || outFile == "" || inLang == "" || outLang == "" {
 		panic("Usage: translate_dataset -in <input.jsonl> -out <output.jsonl> -src <source_lang> -dst <target_lang>")

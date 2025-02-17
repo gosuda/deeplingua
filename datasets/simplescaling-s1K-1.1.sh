@@ -8,5 +8,5 @@
         datasets/simplescaling-s1K-1.1-korean.jsonl \
         datasets/simplescaling-s1K-1.1-korean.fixed.jsonl && \
     python3 scripts/upload_jsonl/upload.py \
-        --name lemon-mint/simplescaling-s1K-1.1-korean \
+        --name exp-models/s1K-1.1-Korean \
         datasets/simplescaling-s1K-1.1-korean.fixed.jsonl

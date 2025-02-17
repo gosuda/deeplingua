@@ -18,7 +18,21 @@ def main():
     # Load the dataset
     dataset = load_dataset("json", data_files=[args.path])
     dataset = dataset.sort("custom_id")
-    dataset =  dataset.remove_columns(["custom_id"])
+    #dataset =  dataset.remove_columns(["custom_id"])
+    print(dataset)
+    def map_func(x):
+        for i in range(len(x["messages"])):
+            role = x["messages"][i]["role"]
+            en = x["messages"][i]["content"]
+            ko = x["messages"][i]["translated_content"]
+            x["messages"][i] = {
+                "role": role,
+                "content": ko,
+                "content_en": en,
+            }
+        return x
+    dataset = dataset.map(map_func)
+    print(dataset)
     
     # Push to hub
     dataset.push_to_hub(args.name)
